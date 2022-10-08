@@ -52,6 +52,10 @@ The resultant web page is included in the repository.  To view, open up the **et
 
 Sample screenshots:
     ![Analyze a Single Asset in the ETF](./viola_ss_1.png "Analyze a Single Asset in the ETF").
+    ![PYPL Data Returns Plot](./viola_ss_2.png "PYPL Data Returns Plot").
+    ![PYPL Cumulative Returns Plot](./viola_ss_3.png "PYPL Cumulative Returns Plot").
+    ![ETF DataFrame](./viola_ss_4.png "TF DataFrame").
+    ![ETF Cumulative Returns Plot](./viola_ss_5.png "ETF Cumulative Returns Plot").
 
 ---
 
