@@ -1,17 +1,15 @@
-# Columbia Fintech Bootcamp: Module #6 Challenge
+# Columbia Fintech Bootcamp: Module #7 Challenge
 
-Feature Summary: Housing Rental Analysis for San Francisco
+Feature Summary: ETF Analysis
 
-- Tool to help credit union members evaluate their financial health by:
-
-     * Using data visualization skills, including aggregation, interactive visualizations, and geospatial analysis, to find properties in the San Fransisco market that are viable investment options.
+     * Build a financial database and web application by using SQL, Python, and the Voilà library to analyze the performance of a hypothetical fintech ETF
 
 - Includes the following tasks:
 
-    * Calculate and plot the housing units per year.
-    * Calculate and plot the average prices per square foot.
-    * Compare the average prices by neighborhood.
-    * Build an interactive neighborhood map.
+    * Analyze a Single Asset in the ETF.
+    * Optimize Data Access with Advanced SQL Queries
+    * Analyze the ETF Portfolio
+    * Deploy the Notebook as a Web Application
 
 ---
 
@@ -32,6 +30,8 @@ Before running the application first install the following dependencies.
 
 python pip install: <br>
     [pandas](https://pandas.pydata.org/) <br>
+    [numpy](https://numpy.org/) <br>
+    [sqlalchemy](https://www.sqlalchemy.org/)
     [hvplot.pandas](https://hvplot.holoviz.org/user_guide/Introduction.html) <br>
 
 *Assumption made for module challenge: the* **Path** *module will not be required to be explicitely called out in Installation guide section*
@@ -42,7 +42,16 @@ To run Jupyter Lab, need to install Anaconda:
 
 ## Usage
 
-To run the financial planning tools application, simply clone the repository and run the **san_francisco_housing.ipynb** script in Jupyter Lab:
+To run the financial planning tools application, simply clone the repository and run the **etf_analyzer.ipynb** script in Jupyter Lab:
+
+---
+
+## ETF Analyzer Web Application
+
+The resultant web page is included in the repository.  To view, open up the **etf_analyzer.html** web page.
+
+Sample screenshots:
+    ![Analyze a Single Asset in the ETF](./viola_ss_1.png "Analyze a Single Asset in the ETF").
 
 ---
 
