@@ -511,11 +511,14 @@ display(etf_portfolio_returns)
 # to calculate the annualized return for the portfolio. 
 annualized_etf_portfolio_returns = etf_portfolio_returns['ETF.mean_daily_returns'] * 252
 
+# Convert decimal to percentages (multiply by 100)
+annualized_etf_portfolio_returns_percent = annualized_etf_portfolio_returns * 100
+
 # Display the annualized return value of the ETF portfolio.
-display(annualized_etf_portfolio_returns)
+display(annualized_etf_portfolio_returns_percent)
 
 # Add a column to the etf portfolio dataframe to include the annualized mean daily returns
-etf_portfolio_returns['ETF.ann_mean_daily_returns'] = annualized_etf_portfolio_returns
+etf_portfolio_returns['ETF.ann_mean_daily_returns_per'] = annualized_etf_portfolio_returns_percent
 display(etf_portfolio_returns)
 
 
