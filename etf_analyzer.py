@@ -413,10 +413,12 @@ etf_portfolio['time'] = pd.to_datetime(etf_portfolio['time'])
 etf_portfolio = etf_portfolio.set_index('time')
 
 # Since each of the portfolios have the same column names (open, high, close, etc.), renaming the columns prepending asset names
-etf_portfolio.columns = ['GDOT.open', 'GDOT.high', 'GDOT.low', 'GDOT.close', 'GDOT.volume', 'GDOT.daily_returns',
-                         'GS.open',   'GS.high',   'GS.low',   'GS.close',   'GS.volume',   'GS.daily_returns',
-                         'PYPL.open', 'PYPL.high', 'PYPL.low', 'PYPL.close', 'PYPL.volume', 'PYPL.daily_returns',
-                         'SQ.open',   'SQ.high',   'SQ.low',   'SQ.close',   'SQ.volume',   'SQ.daily_returns']
+# Create heirarchical columns names based on symbol
+columns = [('GDOT','open'), ('GDOT','high'), ('GDOT','low'), ('GDOT','close'), ('GDOT','volume'), ('GDOT','daily_returns'),
+           ('GS','open'),   ('GS','high'),   ('GS','low'),   ('GS','close'),   ('GS','volume'),   ('GS','daily_returns'),
+           ('PYPL','open'), ('PYPL','high'), ('PYPL','low'), ('PYPL','close'), ('PYPL','volume'), ('PYPL','daily_returns'),
+           ('SQ','open'),   ('SQ','high'),   ('SQ','low'),   ('SQ','close'),   ('SQ','volume'),   ('SQ','daily_returns')]                                           
+etf_portfolio.columns = pd.MultiIndex.from_tuples(columns)
 
 # Review the resulting DataFrame
 display(etf_portfolio)
@@ -449,12 +451,13 @@ etf_portfolio['time'] = pd.to_datetime(etf_portfolio['time'])
 # Set the index column to 'time'
 etf_portfolio = etf_portfolio.set_index('time')
 
-# Since each of the portfolios have the same column names (open, high, close, etc.), renaming the columns
-# prepending the portfolio names.
-etf_portfolio.columns = ['GDOT.open', 'GDOT.high', 'GDOT.low', 'GDOT.close', 'GDOT.volume', 'GDOT.daily_returns',
-                         'GS.open',   'GS.high',   'GS.low',   'GS.close',   'GS.volume',   'GS.daily_returns',
-                         'PYPL.open', 'PYPL.high', 'PYPL.low', 'PYPL.close', 'PYPL.volume', 'PYPL.daily_returns',
-                         'SQ.open',   'SQ.high',   'SQ.low',   'SQ.close',   'SQ.volume',   'SQ.daily_returns']
+# Since each of the portfolios have the same column names (open, high, close, etc.), renaming the columns prepending asset names
+# Create heirarchical columns names based on symbol
+columns = [('GDOT','open'), ('GDOT','high'), ('GDOT','low'), ('GDOT','close'), ('GDOT','volume'), ('GDOT','daily_returns'),
+           ('GS','open'),   ('GS','high'),   ('GS','low'),   ('GS','close'),   ('GS','volume'),   ('GS','daily_returns'),
+           ('PYPL','open'), ('PYPL','high'), ('PYPL','low'), ('PYPL','close'), ('PYPL','volume'), ('PYPL','daily_returns'),
+           ('SQ','open'),   ('SQ','high'),   ('SQ','low'),   ('SQ','close'),   ('SQ','volume'),   ('SQ','daily_returns')]                                           
+etf_portfolio.columns = pd.MultiIndex.from_tuples(columns)
 
 display(etf_portfolio)
 
@@ -466,11 +469,7 @@ display(etf_portfolio)
 
 # Create a DataFrame that displays the mean value of the “daily_returns” columns for all four assets.
 
-# Method #1 Filter via dataframe (for demonstration purposes only)
-# Create a data frame with the daily returns from all 4 portfolios
-etf_portfolio_returns_df = etf_portfolio[['GDOT.daily_returns', 'GS.daily_returns', 'PYPL.daily_returns', 'SQ.daily_returns']]
-
-# Method #2 : Filter via SQL
+#  Filter via SQL
 query = f"""
 SELECT 
     gdot.time, gdot.daily_returns,
@@ -493,10 +492,12 @@ etf_portfolio_returns_sql = etf_portfolio_returns_sql.set_index('time')
 etf_portfolio_returns = etf_portfolio_returns_sql
 
 # Since each of the portfolios have the same column names (daily returns), renaming the columns prepending the asset names.
-etf_portfolio_returns.columns = ['GDOT.daily_returns', 'GS.daily_returns', 'PYPL.daily_returns', 'SQ.daily_returns']
+#etf_portfolio_returns.columns = ['GDOT_daily_returns', 'GS_daily_returns', 'PYPL_daily_returns', 'SQ_daily_returns']
+columns = [('daily_returns','GDOT'), ('daily_returns','GS'), ('daily_returns','PYPL'), ('daily_returns','SQ')] 
+etf_portfolio_returns.columns = pd.MultiIndex.from_tuples(columns)
 
 # Add a column to the etf portfolio dataframe to include the annualized mean daily returns
-etf_portfolio_returns['ETF.mean_daily_returns'] = etf_portfolio_returns.mean(axis=1)
+etf_portfolio_returns[('mean_daily_returns','ETF')] = etf_portfolio_returns.mean(axis=1)
 
 # Review the resulting DataFrame
 display(etf_portfolio_returns)
@@ -509,7 +510,7 @@ display(etf_portfolio_returns)
 
 # Use the average daily returns provided by the etf_portfolio_returns DataFrame 
 # to calculate the annualized return for the portfolio. 
-annualized_etf_portfolio_returns = etf_portfolio_returns['ETF.mean_daily_returns'] * 252
+annualized_etf_portfolio_returns = etf_portfolio_returns['mean_daily_returns']['ETF'] * 252
 
 # Convert decimal to percentages (multiply by 100)
 annualized_etf_portfolio_returns_percent = annualized_etf_portfolio_returns * 100
@@ -518,7 +519,7 @@ annualized_etf_portfolio_returns_percent = annualized_etf_portfolio_returns * 10
 display(annualized_etf_portfolio_returns_percent)
 
 # Add a column to the etf portfolio dataframe to include the annualized mean daily returns
-etf_portfolio_returns['ETF.ann_mean_daily_returns_per'] = annualized_etf_portfolio_returns_percent
+etf_portfolio_returns[('ann_mean_daily_returns_per','ETF')] = annualized_etf_portfolio_returns_percent
 display(etf_portfolio_returns)
 
 
@@ -529,13 +530,13 @@ display(etf_portfolio_returns)
 
 # Use the average daily returns provided by the etf_portfolio_returns DataFrame 
 # to calculate the cumulative returns
-etf_cumulative_returns = (1 + etf_portfolio_returns['ETF.mean_daily_returns']).cumprod() - 1
+etf_cumulative_returns = (1 + etf_portfolio_returns['mean_daily_returns']['ETF']).cumprod() - 1
 
 # Display the final cumulative return value
 display(etf_cumulative_returns)
 
 # Add a column to the etf portfolio dataframe to include the cumulative returns
-etf_portfolio_returns['ETF.cum_returns'] = etf_cumulative_returns
+etf_portfolio_returns[('cum_returns','ETF')] = etf_cumulative_returns
 display(etf_portfolio_returns)
 
 
@@ -545,12 +546,10 @@ display(etf_portfolio_returns)
 
 
 # Create an interactive visualization with hvplot to plot the daily returns for PYPL.
-etf_portfolio_returns.hvplot.line(
-    x = "time",
+etf_portfolio_returns['daily_returns'].hvplot.line(
     xlabel = "Time",
-    y = "PYPL.daily_returns",
     ylabel = "Cumulative Returns",
-    title = "(PYPL) Daily Returns",
+    title = "(GDOT, GS, PYPL, SQ) Daily Returns",
     frame_width = 700,
     frame_height = 300    
 ).opts(
@@ -563,12 +562,12 @@ etf_portfolio_returns.hvplot.line(
 
 # Create an interactive visaulization with hvplot to plot the cumulative returns for PYPL.
 
-etf_cumulative_return_ppyls = (1 + etf_portfolio_returns['PYPL.daily_returns']).cumprod() - 1
+etf_cumulative_return_ppyls = (1 + etf_portfolio_returns['daily_returns']).cumprod() - 1
 
 etf_cumulative_return_ppyls.hvplot.line(
     xlabel = "Time",
     ylabel = "Cumulative Returns",
-    title = "(PYPL) Cumulative Returns",
+    title = "(GDOT, GS, PYPL, SQ) Cumulative Returns",
     frame_width = 700,
     frame_height = 300    
 ).opts(
@@ -580,12 +579,10 @@ etf_cumulative_return_ppyls.hvplot.line(
 
 
 # Using hvplot, create an interactive line plot that visualizes the ETF portfolios cumulative return values.
-etf_portfolio_returns.hvplot.line(
-    x = "time",
+etf_portfolio_returns['cum_returns']['ETF'].hvplot.line(
     xlabel = "Time",
-    y = "ETF.cum_returns",
     ylabel = "Cumulative Returns",
-    title = "ETF (GDOT, GS, PYPL, SQ) Cumulative Returns",
+    title = "ETF Cumulative Returns",
     frame_width = 700,
     frame_height = 300    
 ).opts(
